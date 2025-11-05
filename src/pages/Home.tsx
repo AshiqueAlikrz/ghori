@@ -1,99 +1,104 @@
-import React from "react";
-import { motion } from "motion/react";
-import heroImg from "../assets/react.svg";
-
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15, when: "beforeChildren" },
-  },
-};
-
-const leftVariant = {
-  hidden: { opacity: 0, x: -50 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-};
-
-const rightVariant = {
-  hidden: { opacity: 0, x: 50 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-};
-
-const centerVariant = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 140, damping: 12 } },
-};
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import heroImg from "../assets/images/medicine.png";
+import handImage from "../assets/images/hand.png";
 
 export default function Home(): JSX.Element {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const imageOpacity = useTransform(scrollYProgress, [0, 0.2, 1], [0, 0.6, 1]);
+  const imageY = useTransform(scrollYProgress, [1, 0], [120, 0]);
+  const imageX = useTransform(scrollYProgress, [0, 1], [300, 0]);
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+
   return (
-    <div className="w-full h-screen relative overflow-hidden bg-gradient-to-b from-indigo-900 via-purple-800 to-pink-900 text-white flex items-center justify-center px-6 md:px-12 lg:px-24">
-      {/* Background blobs */}
-      <motion.div
-        className="absolute pointer-events-none mix-blend-screen filter blur-3xl opacity-50 rounded-full left-0 top-0 -translate-x-1/6"
-        style={{
-          width: "120vw",
-          height: "60vh",
-          background:
-            "radial-gradient(circle at 30% 30%, rgba(99,102,241,0.4), transparent 40%), linear-gradient(135deg, rgba(124,58,237,0.2), rgba(99,102,241,0.1))",
-        }}
-        animate={{ y: [0, -25, 0], opacity: [0.6, 0.2, 0.6] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute pointer-events-none mix-blend-screen filter blur-3xl opacity-40 rounded-full right-0 bottom-0 translate-x-1/8"
-        style={{
-          width: "100vw",
-          height: "55vh",
-          background:
-            "radial-gradient(circle at 70% 70%, rgba(16,185,129,0.3), transparent 30%), linear-gradient(45deg, rgba(20,184,166,0.15), rgba(6,95,70,0.05))",
-        }}
-        animate={{ x: [0, 30, 0], opacity: [0.4, 0.15, 0.4] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <div className="w-full relative bg-gradient-to-b from-[#fffcf9] to-[#f4e7cc] text-[#5a3e36]">
+      {/* HERO SECTION */}
+      <div className="w-full h-screen flex items-center justify-center px-6 relative overflow-hidden">
+        {/* Left decorative shape */}
+        <motion.div
+          initial={{ x: -80, opacity: 0 }}
+          animate={{ x: 0, opacity: 0.4 }}
+          transition={{ duration: 1.4 }}
+          className="absolute left-8 top-1/4 w-28 h-28 bg-[#e9d9be] rounded-full blur-xl"
+        />
 
-      <motion.main className="relative z-10 w-full max-w-[1100px] px-6 py-12 flex items-center justify-center" variants={container} initial="hidden" animate="visible">
-        <div className="w-full flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Left text */}
-          <motion.div className="hidden md:flex flex-1 justify-start" variants={leftVariant}>
-            <span className="text-lg md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-500 drop-shadow-lg">
-              wellness in every drop
-            </span>
-          </motion.div>
+        {/* Right decorative shape */}
+        <motion.div
+          initial={{ x: 80, opacity: 0 }}
+          animate={{ x: 0, opacity: 0.4 }}
+          transition={{ duration: 1.4 }}
+          className="absolute right-10 bottom-1/4 w-32 h-32 bg-[#e4cbaa] rounded-full blur-xl"
+        />
 
-          {/* Mobile: left text */}
-          <motion.div className="md:hidden w-full flex justify-center mb-4" variants={leftVariant}>
-            <span className="text-center text-base font-semibold text-purple-200">
-              wellness in every drop
-            </span>
-          </motion.div>
+        <motion.div
+          style={{ opacity: headingOpacity }}
+          className=" text-center items-center flex w-full   gap-4"
+        >
+          <h1 className=" text-4xl md:text-6xl font-extrabold tracking-tight">
+            Welcome to Wellness
+          </h1>
+          <div className="relative flex h-screen bg-amber-200 w-64 md:w-[440px]">
+            {/* Hand Image - base layer */}
+            <motion.img
+              src={handImage}
+              alt="Hand"
+              className="absolute bottom-0 right-0  w-full md:h-[300px] object-contain z-10"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            />
 
-          {/* Center image */}
-          <motion.div className="flex-shrink-0" variants={centerVariant} animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}>
+            {/* Hero Image - positioned on the hand */}
             <motion.img
               src={heroImg}
-              alt="Wellness"
-              className="w-48 h-48 md:w-56 md:h-56 lg:w-72 lg:h-72 object-contain rounded-xl shadow-2xl"
-              whileHover={{ scale: 1.05, rotate: 2 }}
-              whileTap={{ scale: 0.98 }}
+              alt="Medicine"
+              className="absolute left-1/2 -translate-x-1/2 md:bottom-32 w-36 md:w-[340px] md:h-[240px] object-contain z-20 drop-shadow-xl"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
             />
-          </motion.div>
+          </div>
 
-          {/* Mobile: right text */}
-          <motion.div className="md:hidden w-full flex justify-center mt-4" variants={rightVariant}>
-            <span className="text-center text-sm font-medium text-green-200">
-              a powerful medicine for your health
-            </span>
-          </motion.div>
+          <p className="text-lg md:text-xl font-medium opacity-80">
+            Your journey to a healthier life starts here 🌿
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="mt-4 bg-[#5a3e36] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#6b4a43]"
+            >
+              Discover Products
+            </motion.button>
+          </p>
+        </motion.div>
+      </div>
+      {/* FLOATING BRAND TEXT */}
+      <p className=" absolute bottom-2/4 left-24 w-32  text-[80px] md:text-[140px] font-extrabold text-[#e6dac7] tracking-[0.2em] text-center select-none">
+        FLORADYLE
+      </p>
 
-          {/* Right text */}
-          <motion.div className="hidden md:flex flex-1 justify-end" variants={rightVariant}>
-            <span className="text-lg md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-teal-400 drop-shadow-lg">
-              a powerful medicine for your health
-            </span>
-          </motion.div>
-        </div>
-      </motion.main>
+      {/* Scroll space */}
+      <div className="h-[15vh]"></div>
+
+      {/* SECOND IMAGE SCROLL SECTION */}
+      <section
+        ref={sectionRef}
+        className="w-full h-screen flex items-center justify-center relative overflow-hidden"
+      >
+        <motion.img
+          src={heroImg}
+          alt="Wellness"
+          className="w-64 md:w-80 md:h-[340px] object-contain z-20 drop-shadow-xl"
+          style={{ opacity: imageOpacity, x: imageX, y: imageY }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
+        />
+      </section>
     </div>
   );
 }
