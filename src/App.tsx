@@ -1,17 +1,47 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import Home from "./pages/Home";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-function App() {
-  const [count, setCount] = useState(0);
+import "./App.css";
+import Navbar from "./pages/Navbar";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Products from "./pages/Products";
+import Footer from "./pages/Footer";
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+export default function App() {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Smooth scrolling
+    const smoother = ScrollSmoother.create({
+      wrapper: wrapperRef.current!,
+      content: contentRef.current!,
+      smooth: 1.5, // scroll smoothing
+      effects: true, // enable parallax effects on data-speed
+      normalizeScroll: true, // fix inconsistent scroll behavior
+    });
+
+    return () => {
+      smoother.kill();
+      ScrollTrigger.killAll();
+    };
+  }, []);
 
   return (
-    <>
-      <Home />
-    </>
+    <div ref={wrapperRef} id="smooth-wrapper">
+      <Navbar />
+      <div ref={contentRef} id="smooth-content">
+        <Home />
+        <About />
+        <Products />
+        <Footer />
+      </div>
+    </div>
   );
 }
-
-export default App;
