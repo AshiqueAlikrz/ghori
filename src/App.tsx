@@ -38,8 +38,8 @@ export default function App() {
       <Navbar />
       <div ref={contentRef} id="smooth-content">
         <Home />
-        <About />
         <Products />
+        <About />
         <Footer />
       </div>
     </div>
