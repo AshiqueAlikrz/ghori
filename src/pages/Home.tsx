@@ -15,8 +15,12 @@ export default function Home() {
   const imageOpacity = useTransform(scrollYProgress, [0, 0.2, 1], [0, 1, 1]);
   const imageY = useTransform(scrollYProgress, [0, 0.7], [0, 0]); // start above screen, move down
   const headingOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  const imageAY = useTransform(scrollYProgress, [0, 1], [0, 1500]);
-  const imageAX = useTransform(scrollYProgress, [0, 1], [0, 800]); // adjust px as needed
+  // const imageAY = useTransform(scrollYProgress, [0, 1], [0, 1500]);
+  const imageAX = useTransform(scrollYProgress, [0, 1], [0, 900]); // adjust px as needed
+
+
+  const rawY = useTransform(scrollYProgress, [0, 1], [0, 1500]);
+  const imageAY = useTransform(rawY, (value) => Math.min(value, 700)); // clamp at 700
 
   const imageAOpacity = useTransform(scrollYProgress, [0.9, 1], [1, 1]);
 
