@@ -1,9 +1,6 @@
-import React from "react";
-import heroImg from "../assets/images/medicine.png";
 import { CardHoverEffectDemo } from "../components/list";
 
 export default function Products() {
-  const products = ["Herbal Drops", "Essential Oils", "Organic Tea"];
 
   return (
     <section id="products" className="fade-section min-h-screen bg-[#f7f2e8] py-20 text-center">

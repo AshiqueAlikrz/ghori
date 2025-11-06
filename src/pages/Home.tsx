@@ -1,11 +1,10 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import heroImg from "../assets/images/medicine.png";
-import handImage from "../assets/images/Production-plant-2.webp";
 import { TypewriterEffect } from "../components/ui/typewriter-effect";
 import { TextGenerateEffect } from "../components/ui/text-generate-effect";
 
-export default function Home(): JSX.Element {
+export default function Home() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -15,7 +14,6 @@ export default function Home(): JSX.Element {
 
   const imageOpacity = useTransform(scrollYProgress, [0, 0.2, 1], [0, 1, 1]);
   const imageY = useTransform(scrollYProgress, [0, 0.7], [0, 0]); // start above screen, move down
-  const imageX = useTransform(scrollYProgress, [0, 1], [600, -50]); // move r
   const headingOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
   const imageAY = useTransform(scrollYProgress, [0, 1], [0, 1500]);
   const imageAX = useTransform(scrollYProgress, [0, 1], [0, 800]); // adjust px as needed
@@ -153,11 +151,7 @@ export default function Home(): JSX.Element {
             lactic acid bacteria, yeast, and fungal cultures."
             />
           </div>
-          <button
-            className="bg-[#5a3e36] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#6b4a43] w-fit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <button className="bg-[#5a3e36] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#6b4a43] w-fit">
             Learn More
           </button>
         </motion.div>
